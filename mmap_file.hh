@@ -46,14 +46,12 @@ public:
 
     // Move constructor
     MmapFile(MmapFile&& other) {
-        file_name_ = other.file_name_;
-        mmap_start_ = other.mmap_start_;
-        fd_ = other.fd_;
-        file_size_ = other.file_size_;
-        cur_ = other.cur_;
-        end_ = other.end_;
-
-        other.fd_ = -1;
+        std::swap(file_name_, other.file_name_);
+        std::swap(mmap_start_, other.mmap_start_);
+        std::swap(fd_, other.fd_);
+        std::swap(file_size_, other.file_size_);
+        std::swap(cur_, other.cur_);
+        std::swap(end_, other.end_);
     }
 
     // copy bytes to destination and advance cursor.
