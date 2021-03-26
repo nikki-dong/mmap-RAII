@@ -5,6 +5,7 @@
 // usage: ./a.out <file_name> mmap/fstream
 // A driver for comparing performance between using fstream and MmapFile.
 // Open a file and read one byte at a time, and then copy to user buffer.
+// $ time ./a.out FILE mmap && time ./a.out FILE fstream
 int main(int argc, char** argv) {
     if (argc <= 2) {
       std::cout << "invalid number of input arguments" << std::endl;
@@ -13,14 +14,17 @@ int main(int argc, char** argv) {
 
 
     char buff[1];
+    // total number of bytes read.
     size_t total = 0;
     
+    // callback to execute when reading a byte.
     auto callback = [&total, &buff](const char c){
                           buff[0] = c;
                           total++;
                     };
 
     if (std::string(argv[2]) == std::string("mmap")) {
+        // If user wants to read a file using mmap:
         nikki::MmapFile file{argv[1]};
    
 
@@ -30,6 +34,7 @@ int main(int argc, char** argv) {
         };
         std::cout << "mmap read " << total << " bytes";
     } else if (std::string(argv[2]) == std::string("fstream")) {
+        // If user wants to read a file using fstream:
         std::fstream file;
         file.open(argv[1]);
 
