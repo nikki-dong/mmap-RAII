@@ -13,6 +13,9 @@ namespace nikki {
 // and automatically cleans itself up (RAII).
 class MmapFile {
 public:
+    // Disallow copy.
+    MmapFile(const MmapFile&) = delete;
+
     // TODO: support writing as well.
     MmapFile(const char* file_name) : file_name_(file_name) {
         fd_ = ::open(file_name, O_RDONLY, 0);
@@ -39,6 +42,18 @@ public:
         assert(rc == 0);
         rc = ::close(fd_);
         assert(rc == 0);
+    }
+
+    // Move constructor
+    MmapFile(MmapFile&& other) {
+        file_name_ = other.file_name_;
+        mmap_start_ = other.mmap_start_;
+        fd_ = other.fd_;
+        file_size_ = other.file_size_;
+        cur_ = other.cur_;
+        end_ = other.end_;
+
+        other.fd_ = -1;
     }
 
     // copy bytes to destination and advance cursor.

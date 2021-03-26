@@ -35,12 +35,13 @@ int main(int argc, char** argv) {
         std::cout << "mmap read " << total << " bytes";
     } else if (std::string(argv[2]) == std::string("fstream")) {
         // If user wants to read a file using fstream:
-        std::fstream file;
-        file.open(argv[1]);
+        std::ifstream file(argv[1], std::ifstream::binary);
 
-        std::for_each(std::istream_iterator<char>(file),
-                      std::istream_iterator<char>(),
+        std::for_each(std::istreambuf_iterator<char>(file),
+                      std::istreambuf_iterator<char>(),
                       callback);           
+
+        std::cout << "fstream read " << total << " bytes";
     } else {
         std::cout << "unspecified command";
     }
